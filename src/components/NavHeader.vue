@@ -52,7 +52,7 @@
         <li class="nav-item">
           <router-link
             class="nav-link"
-            to="/login"
+            to="/register"
             exact-active-class="active"
           >
             Sign up

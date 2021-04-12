@@ -4,10 +4,12 @@
       <div class="row">
         <div class="col-md-6 offset-md-3 col-xs-12">
           <h1 class="text-xs-center">
-            Sign up
+            {{ buttonTip }}
           </h1>
           <p class="text-xs-center">
-            <a href="">Have an account?</a>
+            <router-link :to="isLoginRoute ? '/register' : '/login'">
+              {{ isLoginRoute ? 'Need' : 'Have' }} an account?
+            </router-link>
           </p>
 
           <ul class="error-messages">
@@ -15,7 +17,10 @@
           </ul>
 
           <form>
-            <fieldset class="form-group">
+            <fieldset
+              v-if="!isLoginRoute"
+              class="form-group"
+            >
               <input
                 class="form-control form-control-lg"
                 type="text"
@@ -37,7 +42,7 @@
               >
             </fieldset>
             <button class="btn btn-lg btn-primary pull-xs-right">
-              Sign up
+              {{ buttonTip }}
             </button>
           </form>
         </div>
@@ -47,8 +52,19 @@
 </template>
 
 <script>
+import { useRoute } from 'vue-router'
+import { computed } from 'vue'
+
 export default {
-  name: 'Login'
+  name: 'Login',
+  setup () {
+    const isLoginRoute = computed(() => useRoute().name === 'Login')
+    const buttonTip = computed(() => (isLoginRoute.value ? 'Sign in' : 'Sign up'))
+    return {
+      isLoginRoute,
+      buttonTip
+    }
+  }
 }
 </script>
 
