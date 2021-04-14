@@ -18,58 +18,76 @@
             Home
           </router-link>
         </li>
-        <li
-          v-if="isLogin"
-          class="nav-item"
-        >
-          <a
-            class="nav-link"
-            href=""
+        <template v-if="isLogin">
+          <li
+            class="nav-item"
           >
-            <i class="ion-compose" />&nbsp;New Post
-          </a>
-        </li>
-        <li
-          v-if="isLogin"
-          class="nav-item"
-        >
-          <a
-            class="nav-link"
-            href=""
+            <router-link
+              class="nav-link"
+              to="/editArticle"
+              exact-active-class="active"
+            >
+              <i class="ion-compose" />&nbsp;New Post
+            </router-link>
+          </li>
+          <li
+            class="nav-item"
           >
-            <i class="ion-gear-a" />&nbsp;Settings
-          </a>
-        </li>
-        <li class="nav-item">
-          <router-link
-            class="nav-link"
-            to="/login"
-            exact-active-class="active"
-          >
-            Sign in
-          </router-link>
-        </li>
-        <li class="nav-item">
-          <router-link
-            class="nav-link"
-            to="/register"
-            exact-active-class="active"
-          >
-            Sign up
-          </router-link>
-        </li>
+            <router-link
+              class="nav-link"
+              to="/settings"
+              exact-active-class="active"
+            >
+              <i class="ion-gear-a" />&nbsp;Settings
+            </router-link>
+          </li>
+          <li class="nav-item">
+            <router-link
+              class="nav-link"
+              to="/profile"
+              exact-active-class="active"
+            >
+              <img
+                class="user-pic"
+                src="https://i.loli.net/2021/04/13/S7BxTqR1X2oGfpK.jpg"
+              >
+              qrq2
+            </router-link>
+          </li>
+        </template>
+        <template v-else>
+          <li class="nav-item">
+            <router-link
+              class="nav-link"
+              to="/login"
+              exact-active-class="active"
+            >
+              Sign in
+            </router-link>
+          </li>
+          <li class="nav-item">
+            <router-link
+              class="nav-link"
+              to="/register"
+              exact-active-class="active"
+            >
+              Sign up
+            </router-link>
+          </li>
+        </template>
       </ul>
     </div>
   </nav>
 </template>
 
 <script>
-import { ref } from 'vue'
+import { computed } from 'vue'
+import { useStore } from 'vuex'
 
 export default {
   name: 'NavHeader',
   setup () {
-    const isLogin = ref(false)
+    const isLogin = computed(() => !!useStore().state.user)
     return {
       isLogin
     }

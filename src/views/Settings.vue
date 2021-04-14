@@ -49,6 +49,13 @@
               </button>
             </fieldset>
           </form>
+          <hr>
+          <button
+            class="btn btn-outline-danger"
+            @click="logout"
+          >
+            Or click here to logout.
+          </button>
         </div>
       </div>
     </div>
@@ -56,8 +63,26 @@
 </template>
 
 <script>
+import { remove } from '@/utils/storage'
+import { useStore } from 'vuex'
+import { useRouter } from 'vue-router'
+
 export default {
-  name: 'Settings'
+  name: 'Settings',
+  setup () {
+    const store = useStore()
+    const router = useRouter()
+
+    function logout () {
+      store.commit('setUser', null)
+      remove('user')
+      router.replace('/')
+    }
+
+    return {
+      logout
+    }
+  }
 }
 </script>
 

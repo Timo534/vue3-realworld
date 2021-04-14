@@ -13,31 +13,48 @@
           </p>
 
           <ul class="error-messages">
-            <li>That email is already taken</li>
+            <template
+              v-for="(value, key) in errors"
+              :key="key"
+            >
+              <li
+                v-for="(error, index) in value"
+                :key="index"
+              >
+                {{ key }} {{ error }}
+              </li>
+            </template>
           </ul>
 
-          <form>
+          <form @submit.prevent="onSubmit">
             <fieldset
               v-if="!isLoginRoute"
               class="form-group"
             >
               <input
+                v-model="user.username"
                 class="form-control form-control-lg"
                 type="text"
+                required
                 placeholder="Your Name"
               >
             </fieldset>
             <fieldset class="form-group">
               <input
+                v-model="user.email"
                 class="form-control form-control-lg"
-                type="text"
+                type="email"
+                required
                 placeholder="Email"
               >
             </fieldset>
             <fieldset class="form-group">
               <input
+                v-model="user.password"
                 class="form-control form-control-lg"
                 type="password"
+                required
+                minlength="8"
                 placeholder="Password"
               >
             </fieldset>
@@ -52,17 +69,43 @@
 </template>
 
 <script>
-import { useRoute } from 'vue-router'
-import { computed } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
+import { useStore } from 'vuex'
+import { ref, reactive, toRaw, computed } from 'vue'
+import { login, register } from '@/api/auth'
 
 export default {
   name: 'Login',
   setup () {
+    const router = useRouter()
+    const store = useStore()
+
+    const user = reactive({
+      username: '',
+      email: '',
+      password: ''
+    })
+    const errors = ref(null)
+
     const isLoginRoute = computed(() => useRoute().name === 'Login')
     const buttonTip = computed(() => (isLoginRoute.value ? 'Sign in' : 'Sign up'))
+
+    async function onSubmit () {
+      try {
+        const { data } = isLoginRoute.value ? await login({ user: toRaw(user) }) : await register({ user: toRaw(user) })
+        store.commit('setUser', data.user)
+        router.replace('/')
+      } catch (e) {
+        errors.value = e?.response?.data?.errors
+      }
+    }
+
     return {
+      user,
+      errors,
       isLoginRoute,
-      buttonTip
+      buttonTip,
+      onSubmit
     }
   }
 }
