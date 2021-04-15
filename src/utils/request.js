@@ -1,8 +1,14 @@
 import axios from 'axios'
-
-axios.defaults.baseURL = 'https://conduit.productionready.io'
+import { get } from '@/utils/storage'
 
 const instance = axios.create()
+const token = get('user')?.token
+
+instance.defaults.baseURL = 'https://conduit.productionready.io'
+
+if (token) {
+  instance.defaults.headers.common.Authorization = `Token ${token}`
+}
 
 // 添加请求拦截器
 instance.interceptors.request.use(function (config) {

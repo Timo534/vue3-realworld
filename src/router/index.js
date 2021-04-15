@@ -17,6 +17,22 @@ const routes = [
         }
       },
       {
+        path: 'feed',
+        name: 'FeedArticleList',
+        component: () => import('../views/ArticleList.vue'),
+        meta: {
+          needLogin: true
+        }
+      },
+      {
+        path: 'tag/:tag?',
+        name: 'TagArticleList',
+        component: () => import('../views/ArticleList.vue'),
+        meta: {
+          needLogin: false
+        }
+      },
+      {
         path: 'login',
         name: 'Login',
         component: () => import('../views/Login.vue'),
@@ -76,9 +92,9 @@ const router = createRouter({
 router.beforeEach(to => {
   const needLogin = to.meta.needLogin
   const user = get('user')
-  const isHomePage = to.name === 'ArticleList'
+  const homePageNoNeedLogin = to.name === 'ArticleList' || to.name === 'TagArticleList'
 
-  if (isHomePage) return true
+  if (homePageNoNeedLogin) return true
   else if (needLogin && !user) return '/login'
   else if (!needLogin && user) return '/'
   else return true
