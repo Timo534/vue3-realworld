@@ -65,9 +65,9 @@ const routes = [
         }
       },
       {
-        path: 'editArticle',
-        name: 'EditArticle',
-        component: () => import('../views/EditArticle.vue'),
+        path: 'editor',
+        name: 'Editor',
+        component: () => import('../views/Editor.vue'),
         meta: {
           needLogin: true
         }

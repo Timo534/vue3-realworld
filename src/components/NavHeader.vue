@@ -24,7 +24,7 @@
           >
             <router-link
               class="nav-link"
-              to="/editArticle"
+              to="/editor"
               exact-active-class="active"
             >
               <i class="ion-compose" />&nbsp;New Post
